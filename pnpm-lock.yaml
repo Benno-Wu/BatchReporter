@@ -1,0 +1,48 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      typescript:
+        specifier: ^5.4.3
+        version: 5.4.3
+
+  packages/core:
+    dependencies:
+      tapable:
+        specifier: ^2.2.1
+        version: 2.2.1
+    devDependencies:
+      '@bennowu/batch-reporter-types':
+        specifier: workspace:^
+        version: link:../types
+
+  packages/types: {}
+
+  packages/web:
+    dependencies:
+      '@bennowu/batch-reporter-core':
+        specifier: workspace:^
+        version: link:../core
+    devDependencies:
+      '@bennowu/batch-reporter-types':
+        specifier: workspace:^
+        version: link:../types
+
+packages:
+
+  /tapable@2.2.1:
+    resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
+    engines: {node: '>=6'}
+    dev: false
+
+  /typescript@5.4.3:
+    resolution: {integrity: sha512-KrPd3PKaCLr78MalgiwJnA25Nm8HAmdwN3mYUYZgG/wizIo9EainNVQI9/yDavtVFRN2h3k8uf3GLHuhDMgEHg==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true

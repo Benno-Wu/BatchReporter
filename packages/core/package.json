@@ -1,0 +1,18 @@
+{
+  "name": "@bennowu/batch-reporter-core",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "BennoWu",
+  "license": "MIT",
+  "dependencies": {
+    "tapable": "^2.2.1"
+  },
+  "devDependencies": {
+    "@bennowu/batch-reporter-types": "workspace:^"
+  }
+}
