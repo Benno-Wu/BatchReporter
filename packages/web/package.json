@@ -2,10 +2,14 @@
   "name": "@bennowu/batch-reporter-web",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc"
+    "build": "rollup --config rollup.prod.mjs"
   },
   "author": "BennoWu",
   "license": "MIT",
