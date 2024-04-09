@@ -6,8 +6,9 @@
   "scripts": {
     "build:core": "cd ./packages/core && pnpm run build",
     "build:web": "cd ./packages/web && pnpm run build",
-    "build": "pnpm run build:core && pnpm run build:web",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pnpm run build:core && pnpm run build:web && pnpm run pretest",
+    "pretest": "cd ./packages/test && pnpm run pretest",
+    "test": "cd ./packages/test && pnpm run test"
   },
   "keywords": [],
   "author": "BennoWu",
@@ -24,5 +25,13 @@
     "rollup": "^4.13.2",
     "rollup-plugin-delete": "^2.0.0",
     "typescript": "^5.4.3"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": "https://github.com/Benno-Wu/BatchReporter/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Benno-Wu/BatchReporter"
   }
 }

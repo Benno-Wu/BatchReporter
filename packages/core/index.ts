@@ -28,7 +28,7 @@ export abstract class BatchReporter<data> {
 
     hooks = {
         dump: new AsyncSeriesWaterfallHook<[data[]], boolean>(['data']),
-        load: new AsyncSeriesWaterfallHook<void, data[]>(),
+        load: new AsyncSeriesWaterfallHook<'never', data[]>(['never']),
     }
     optionalHooks = {
         onLoadEnd: new SyncHook<void>(),
@@ -39,7 +39,7 @@ export abstract class BatchReporter<data> {
         onError: new SyncHook<unknown>(['error'])
     }
 
-    lastChanceToSync = () => {
+    protected lastChanceToSync = () => {
         const result = this.config.sendBeacon(this.cache)
         if (result) {
             this.cache = []
@@ -49,19 +49,20 @@ export abstract class BatchReporter<data> {
         }
     }
 
-    start = async () => {
+    protected load = async () => {
         let load: data[] = [];
         try {
-            load = await this.hooks.load.promise()
+            load = await this.hooks.load.promise('never')
             this.optionalHooks.onLoadEnd.call()
         } catch (error) {
             this.optionalHooks.onLoadFail.call(error)
             this.optionalHooks.onError.call(error)
-            return false
         }
         this.cache.push(...load)
+    }
+
+    start = () => {
         this.config.setInterval(this.intervalRequest, this.config.delay)
-        return true
     }
     #pause = () => {
         // todo unnecessary

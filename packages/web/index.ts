@@ -2,8 +2,6 @@ import BatchReporter, { CoreConfig } from "@bennowu/batch-reporter-core";
 import { DataHandler, DataLoader, PickByNullableKeys } from "@bennowu/batch-reporter-types";
 
 export interface WebConfig<T> {
-    request: CoreConfig<T>['request'],
-
     dumpKey: string,
     dumpFormatter?: DataHandler<T, string>,
     loadFormatter?: DataLoader<T[]>,
@@ -26,14 +24,13 @@ const DefaultWebConfig: PickByNullableKeys<WebConfig<unknown>> = {
     beaconTransform: data => data as BodyInit,
 }
 
-
 export class WebBatchReporter<T> extends BatchReporter<T> {
     public webConfig: Required<WebConfig<T>> = DefaultWebConfig as Required<WebConfig<T>>
 
-    constructor(config: WebConfig<T>) {
+    constructor(config: Omit<WebConfig<T> & CoreConfig<T>, 'sendBeacon' | 'setInterval'>) {
         const webConfig = Object.assign(DefaultWebConfig, config)
         super({
-            request: webConfig.request,
+            ...config,
             sendBeacon: (data) => {
                 return navigator.sendBeacon(webConfig.beaconUrl, webConfig.beaconTransform(data))
             },
@@ -41,7 +38,7 @@ export class WebBatchReporter<T> extends BatchReporter<T> {
         })
         this.webConfig = webConfig
 
-        if (config.enableLastSync) {
+        if (this.webConfig.enableLastSync) {
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'hidden') {
                     this.lastChanceToSync()
@@ -60,10 +57,12 @@ export class WebBatchReporter<T> extends BatchReporter<T> {
             }
         })
 
-        this.hooks.load.tapPromise('webLoad', () => {
+        this.hooks.load.tap('webLoad', () => {
             if (!localStorage) throw new Error('[web] localStorage is not supported')
             return this.webConfig.loadFormatter(localStorage.getItem(this.webConfig.dumpKey) ?? '[]')
         })
+
+        this.load()
     }
 }
 

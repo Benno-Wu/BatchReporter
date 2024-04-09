@@ -17,7 +17,7 @@ export declare abstract class BatchReporter<data> {
     constructor(config: CoreConfig<data>);
     hooks: {
         dump: AsyncSeriesWaterfallHook<[data[]], boolean, import("tapable").UnsetAdditionalOptions>;
-        load: AsyncSeriesWaterfallHook<void, data[], import("tapable").UnsetAdditionalOptions>;
+        load: AsyncSeriesWaterfallHook<"never", data[], import("tapable").UnsetAdditionalOptions>;
     };
     optionalHooks: {
         onLoadEnd: SyncHook<void, void, import("tapable").UnsetAdditionalOptions>;
@@ -27,8 +27,9 @@ export declare abstract class BatchReporter<data> {
         onLastSyncFail: SyncHook<[data[]], void, import("tapable").UnsetAdditionalOptions>;
         onError: SyncHook<unknown, void, import("tapable").UnsetAdditionalOptions>;
     };
-    lastChanceToSync: () => void;
-    start: () => Promise<boolean>;
+    protected lastChanceToSync: () => void;
+    protected load: () => Promise<void>;
+    start: () => void;
     push: (data: data) => void;
     private tryDump;
     private intervalRequest;

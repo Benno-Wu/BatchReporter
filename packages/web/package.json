@@ -18,5 +18,14 @@
   },
   "devDependencies": {
     "@bennowu/batch-reporter-types": "workspace:^"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": "https://github.com/Benno-Wu/BatchReporter/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Benno-Wu/BatchReporter",
+    "directory": "packages/web"
   }
 }
