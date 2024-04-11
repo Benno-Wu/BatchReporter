@@ -1,0 +1,41 @@
+@startuml
+participant batchReporter as b
+participant cache as c
+participant "local/memory" as l
+
+==new==
+[x->b:load
+b->l:async hooks.load, get all the data from local
+c<-l:sync data to cache
+
+==push data==
+[o->b:push
+b->c:insert
+c->l:async hooks.dump with the whole cache
+l->l:if failed, retry
+
+==continuous synchronization to remote==
+[o->b:start
+group interval send data to remote
+c->o]:interval request
+    group request success
+        c->c:clear cache
+        c->l:hooks.dump empty to local
+    end
+    group request failed
+        c->c:won't dump data to local, and wait for the next time of data change
+    end
+end
+
+==last synchronization==
+[x->b:lastChanceToSync
+c->o]:something like sendBeacon, when pageHide
+group successfully queued the data for transfer
+c->c:clear cache
+c->l:dump empty to local
+end
+group Unsuccessfully queued the data for transfer
+c->c:do nothing
+end
+
+@enduml

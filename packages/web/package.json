@@ -1,7 +1,7 @@
 {
   "name": "@bennowu/batch-reporter-web",
   "version": "0.0.1",
-  "description": "",
+  "description": "继承core，并提供web平台的适配实现",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
